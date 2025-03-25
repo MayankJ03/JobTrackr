@@ -31,6 +31,8 @@ const JobSearch = () => {
     }
 
     setLoading(true);
+    console.log("VITE_RAPIDAPI_KEY", import.meta.env.VITE_RAPIDAPI_KEY);
+    console.log("VITE_RAPIDAPI_HOST", import.meta.env.VITE_RAPIDAPI_HOST);
     try {
       // Construct experience-specific search terms
       let experienceQuery = '';
@@ -47,18 +49,29 @@ const JobSearch = () => {
 
       // Construct search query with India focus
       const searchQuery = `${query} ${location || 'India'} ${experienceQuery}`.trim();
+      
+      // Debug logs to verify environment variables
+      console.log('Searching with query:', searchQuery);
+      console.log('Using API Key:', import.meta.env.VITE_RAPIDAPI_KEY);
+      console.log('Using API Host:', import.meta.env.VITE_RAPIDAPI_HOST);
+      
       const response = await fetch(`https://jsearch.p.rapidapi.com/search?query=${encodeURIComponent(searchQuery)}&country=IN`, {
         method: 'GET',
         headers: {
+          //below line i added
+          // 'Accept': 'application/json',
           'X-RapidAPI-Key': import.meta.env.VITE_RAPIDAPI_KEY,
-          'X-RapidAPI-Host': 'jsearch.p.rapidapi.com'
+          'X-RapidAPI-Host': import.meta.env.VITE_RAPIDAPI_HOST,
+          
         }
       });
+      console.log("Raw response status:", response.status);
       
       if (!response.ok) {
         const errorText = await response.text();
-        console.error('API Error:', errorText);
-        throw new Error('Failed to fetch jobs');
+        console.error('API Error Response:', errorText);
+        console.error('Response Status:', response.status);
+        throw new Error(`Failed to fetch jobs: ${response.status} ${errorText}`);
       }
 
       const data = await response.json();
