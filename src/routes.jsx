@@ -1,6 +1,7 @@
 import { Routes, Route } from 'react-router-dom';
 import ProtectedRoute from './components/ProtectedRoute';
 import Navbar from './components/Navbar';
+import Footer from './components/Footer'; // ✅ Import Footer
 
 // Pages
 import Home from './pages/Home';
@@ -13,9 +14,10 @@ import SavedJobs from './pages/SavedJobs';
 
 const AppRoutes = () => {
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="flex flex-col min-h-screen bg-gray-50"> {/* ✅ Added layout classes */}
       <Navbar />
-      <div className="max-w-7xl mx-auto px-4 py-6">
+
+      <div className="flex-grow max-w-7xl mx-auto px-4 py-6"> {/* ✅ This grows to fill space */}
         <Routes>
           <Route path="/" element={<Home />} />
           <Route path="/login" element={<Login />} />
@@ -54,8 +56,10 @@ const AppRoutes = () => {
           />
         </Routes>
       </div>
+
+      <Footer /> {/* ✅ This stays pinned at the bottom */}
     </div>
   );
 };
 
-export default AppRoutes; 
+export default AppRoutes;
